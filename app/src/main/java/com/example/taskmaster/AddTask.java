@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class AddTask extends AppCompatActivity {
@@ -17,12 +18,50 @@ public class AddTask extends AppCompatActivity {
 
          Button SubmitButton = findViewById(R.id.Submit);
          SubmitButton.setOnClickListener(new View.OnClickListener() {
+             int countTasks = 0 ;
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(getApplicationContext(),"submitted!",Toast.LENGTH_LONG).show();
-//                        Intent AllTaskIntent = new Intent(MainActivity.this,AllTasks.class);
-//                        startActivity(AllTaskIntent);
-                    }
+                        countTasks++;
+                        TextView tasksNum = findViewById(R.id.taskNum);
+
+                        tasksNum.setText(String.valueOf(countTasks));
+
+
+                   }
                 });
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
