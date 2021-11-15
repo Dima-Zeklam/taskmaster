@@ -17,7 +17,7 @@ Task Master is an android application for android users to manage their tasks.
 
 * The Add Task
 
-![AddTask](screenshots/AddTask.png)
+![AddTask](screenshots/addTask.png)
 
 
 * The All Tasks
@@ -41,15 +41,15 @@ Task Master is an android application for android users to manage their tasks.
 
 * TaskDetails page when click button1 from home page
 
-![TaskDetails1](screenshots/TaskDetails1.png)
+![TaskDetails1](screenshots/task1.png)
 
 
 * TaskDetails page when click button2 from home page
 
-![TaskDetails2](screenshots/TaskDetails2.png)
+![TaskDetails2](screenshots/task2.png)
 
 * TaskDetails page when click button3 from home page
 
-![TaskDetails3](screenshots/TaskDetails3.png)
+![TaskDetails3](screenshots/task3.png)
 
 
