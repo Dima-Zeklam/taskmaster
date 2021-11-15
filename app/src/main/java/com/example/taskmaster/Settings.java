@@ -16,6 +16,7 @@ public class Settings extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Button preferencesButton = findViewById(R.id.saveButton);
 
         preferencesButton.setOnClickListener(new View.OnClickListener() {

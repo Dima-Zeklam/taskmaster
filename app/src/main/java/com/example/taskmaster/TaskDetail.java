@@ -11,8 +11,46 @@ public class TaskDetail extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detail);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         TextView title = findViewById(R.id.changableTitle);
         String strTitle = getIntent().getExtras().get("title").toString();
         title.setText(strTitle);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
