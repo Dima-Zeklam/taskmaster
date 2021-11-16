@@ -19,7 +19,7 @@
         app:layout_constraintVertical_bias="0.21" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/bodyText"
         android:layout_width="328dp"
         android:layout_height="71dp"
         android:text="Lorem ipsum dolor sit amet. Sed officiis nihil qui saepe iure aut voluptatem laboriosam qui omnis temporibus quo quas culpa! In dolor cumque sed aspernatur cumque est facere sit natus molestias."
