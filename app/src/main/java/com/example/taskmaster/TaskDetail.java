@@ -13,8 +13,11 @@ public class TaskDetail extends AppCompatActivity {
         setContentView(R.layout.activity_task_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         TextView title = findViewById(R.id.changableTitle);
+        TextView body = findViewById(R.id.bodyText);
         String strTitle = getIntent().getExtras().get("title").toString();
+        String strbody = getIntent().getExtras().get("body").toString();
         title.setText(strTitle);
+        body.setText(strbody);
     }
 }
 

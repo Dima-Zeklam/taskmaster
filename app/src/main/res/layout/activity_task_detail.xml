@@ -11,6 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="No Title"
+        android:textColor="#000000"
+        android:textSize="28sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.45"
@@ -19,9 +21,11 @@
         app:layout_constraintVertical_bias="0.21" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/bodyText"
         android:layout_width="328dp"
         android:layout_height="71dp"
+        android:textColor="#000000"
+        android:textSize="24sp"
         android:text="Lorem ipsum dolor sit amet. Sed officiis nihil qui saepe iure aut voluptatem laboriosam qui omnis temporibus quo quas culpa! In dolor cumque sed aspernatur cumque est facere sit natus molestias."
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
