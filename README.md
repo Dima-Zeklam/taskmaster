@@ -24,6 +24,7 @@ Task Master is an android application for android users to manage their tasks.
 
 ![AllTasks](screenshots/AllTasks.png)
 
+------
 ## Lab27:
 * At Task Detail page have changable title and lourm ipsom as description.
 * Update the home page to contain three buttons each button will display different title in Task Detail page. Also there is Setting button which navigate you to Setting page.
@@ -52,6 +53,7 @@ Task Master is an android application for android users to manage their tasks.
 
 ![TaskDetails3](screenshots/task3.png)
 
+----------
 
 ## Lab28:
 * Add the Task model class which contain the title, body and state.
@@ -59,6 +61,25 @@ Task Master is an android application for android users to manage their tasks.
 * when the user click on each task at the Recycle View that is appear on home page will navigate him to Task Detail page. 
 * At Task Detail page have changable title and body based on which task clicked.
 
-* Home page 
+## The pages
+*  Home page update
 
-![Homepage](screenshots/Homepage3.png)
+![Homepage](screenshots/HomePage3.png)
+
+
+* TaskDetails page when click on task one from home page.
+
+![TaskDetails1](screenshots/1.png)
+
+
+* TaskDetails page when click on task two from home page.
+
+![TaskDetails2](screenshots/2.png)
+
+* TaskDetails page when click on task three from home page.
+
+![TaskDetails3](screenshots/3.png)
+
+* TaskDetails page when click on task four from home page.
+
+![TaskDetails3](screenshots/4.png)

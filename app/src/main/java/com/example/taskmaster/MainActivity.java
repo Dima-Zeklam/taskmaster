@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
         allTasks.add(new TaskModel("Task one ","Do workout","new"));
         allTasks.add(new TaskModel("Task two","Do Assignments","assigned"));
         allTasks.add(new TaskModel("Task three","Write the blog","progress"));
-        allTasks.add(new TaskModel("Task four","D  the car","complete"));
+        allTasks.add(new TaskModel("Task four","Drive the car","complete"));
         RecyclerView recyclerView = findViewById(R.id.allTasksRecycleView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new TaskAdapter(allTasks,this));
