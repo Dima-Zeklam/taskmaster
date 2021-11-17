@@ -91,11 +91,12 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
 //        allTasks.add(new TaskModel("Task four","Drive the car","complete"));
         AppDatabase appDb = AppDatabase.getInstance(getApplicationContext());
         TaskDAO taskDao = appDb.taskDao();
-        List<TaskModel> allTasks = taskDao.getAll();
+        List<TaskModel> tasks = taskDao.getAll();
 
+        System.out.println("tasks:::::::::::: "+tasks.size());
         RecyclerView recyclerView = findViewById(R.id.allTasksRecycleView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new TaskAdapter(allTasks,this));
+        recyclerView.setAdapter(new TaskAdapter(tasks,this));
 
 
 }
@@ -105,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         String userName = sharedPreferences.getString("userName","no username yet!");
         TextView userNameText = findViewById(R.id.userName);
+
         userNameText.setText(userName+ "'s Tasks");
 
     }
@@ -114,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
         Intent intent = new Intent(this, TaskDetail.class);
         intent.putExtra("title",task.title);
         intent.putExtra("body",task.body);
+        intent.putExtra("state",task.state);
         startActivity(intent);
     }
 }

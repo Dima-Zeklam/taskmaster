@@ -83,3 +83,33 @@ Task Master is an android application for android users to manage their tasks.
 * TaskDetails page when click on task four from home page.
 
 ![TaskDetails3](screenshots/4.png)
+
+
+## Lab29:
+* Modify on Add Task page to save the data entered in as a Task in the local database.
+* Add the Task model class which contain the title, body and state.
+* Update the home page to display  all Task entities in Recycle View.
+* when the user click on each task at the Recycle View that is appear on home page will navigate him to Task Detail page. 
+* At Task Detail page displayed the title,description and status of a tapped task.
+
+## The pages
+*  Home page update
+
+![Homepage](screenshots/UpdateHomePage.png)
+
+* Add task page , Add First task
+![AddTasksPage](screenshots/AddTasksPage.png)
+
+* TaskDetails page when click on First task from home page.
+
+![TaskDetailsFirstTask](screenshots/TaskDetailsFirstTask.png)
+
+
+* TaskDetails page when click on Task two from home page.
+
+![TaskDetailsTaskTwo](screenshots/TaskDetailsTaskTwo.png)
+
+* TaskDetails page when click on Task three from home page.
+
+![TaskDetailsTaskThree](screenshots/TaskDetailsTaskThree.png)
+

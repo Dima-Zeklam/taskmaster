@@ -11,9 +11,9 @@ public interface TaskDAO {
     @Query("SELECT * FROM taskModel")
     List<TaskModel> getAll();
 
-//    @Query("SELECT * FROM taskModel WHERE id IN (id)")
-//    TaskModel TaskById(Long id);
 
+//    @Query("Select * FROM taskModel WHERE id = :id")
+//    TaskModel getTaskById(long id);
     @Insert
     void insertAll(TaskModel... tasks);
 
