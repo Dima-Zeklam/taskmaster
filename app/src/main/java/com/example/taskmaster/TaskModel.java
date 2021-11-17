@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 @Entity
 public class TaskModel {
 // title, a body, and a state
-   @PrimaryKey
+   @PrimaryKey(autoGenerate = true)
     public long id;
     @ColumnInfo(name = "title")
     public String title;
