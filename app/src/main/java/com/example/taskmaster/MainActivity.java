@@ -83,12 +83,16 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
             startActivity(AllTaskIntent);
         }
     });
+//
+//        List<TaskModel> allTasks = new ArrayList<TaskModel>();
+//        allTasks.add(new TaskModel("Task one ","Do workout","new"));
+//        allTasks.add(new TaskModel("Task two","Do Assignments","assigned"));
+//        allTasks.add(new TaskModel("Task three","Write the blog","progress"));
+//        allTasks.add(new TaskModel("Task four","Drive the car","complete"));
+        AppDatabase appDb = AppDatabase.getInstance(getApplicationContext());
+        TaskDAO taskDao = appDb.taskDao();
+        List<TaskModel> allTasks = taskDao.getAll();
 
-        List<TaskModel> allTasks = new ArrayList<TaskModel>();
-        allTasks.add(new TaskModel("Task one ","Do workout","new"));
-        allTasks.add(new TaskModel("Task two","Do Assignments","assigned"));
-        allTasks.add(new TaskModel("Task three","Write the blog","progress"));
-        allTasks.add(new TaskModel("Task four","Drive the car","complete"));
         RecyclerView recyclerView = findViewById(R.id.allTasksRecycleView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new TaskAdapter(allTasks,this));
