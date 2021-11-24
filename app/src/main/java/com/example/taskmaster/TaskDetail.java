@@ -12,6 +12,7 @@ public class TaskDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         TextView title = findViewById(R.id.changableTitle);
         TextView body = findViewById(R.id.bodyText);
         TextView state = findViewById(R.id.stateText);
@@ -21,6 +22,7 @@ public class TaskDetail extends AppCompatActivity {
         title.setText(strTitle);
         body.setText(strbody);
         state.setText(strState);
+
     }
 }
 

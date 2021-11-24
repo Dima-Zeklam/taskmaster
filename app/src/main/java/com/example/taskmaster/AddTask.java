@@ -14,10 +14,11 @@ import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 
-import java.util.Objects;
 
 public class AddTask extends AppCompatActivity {
-
+//    private RecyclerView recyclerView;
+//    private Handler handler;
+//    private TaskAdapter taskAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +28,7 @@ public class AddTask extends AppCompatActivity {
 
          Button SubmitButton = findViewById(R.id.Submit);
          SubmitButton.setOnClickListener(new View.OnClickListener() {
-             int countTasks = 0 ;
+             int countTasks =0 ;
                     @Override
                     public void onClick(View v) {
                         EditText title = findViewById(R.id.editTitle);
@@ -39,56 +40,27 @@ public class AddTask extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),"submitted!",Toast.LENGTH_LONG).show();
                         countTasks++;
                         TextView tasksNum = findViewById(R.id.taskNum);
-//                        Intent intent = new Intent();
                         TaskModel task = new TaskModel(GetTitle,GetBody,GetState);
                         tasksNum.setText(String.valueOf(countTasks));
-//AppDatabase appDb = AppDatabase.getInstance(getApplicationContext());
-//appDb.taskDao().insertAll(task);
-                        Task item = Task.builder()
+                        //AppDatabase appDb = AppDatabase.getInstance(getApplicationContext());
+                        // appDb.taskDao().insertAll(task);
+
+                        Task tasks = Task.builder()
                                 .title(title.getText().toString())
                                 .body(body.getText().toString())
                                 .state(state.getText().toString())
                                 .build();
-                        Amplify.DataStore.save(
-                                item,
-                                success -> Log.i("Amplify", "Saved item: " + success.item().getId()),
-                                error -> Log.e("Amplify", "Could not save item to DataStore", error)
+
+                        Amplify.API.mutate(
+                                ModelMutation.create(tasks),
+                                response -> Log.i("MyAmplifyApp", "Added Todo with id: " + response.getData().getId()
+                                ),
+
+                                error -> Log.e("MyAmplifyApp", "Create failed", error)
                         );
+
                    }
 
                 });
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
