@@ -5,6 +5,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.amplifyframework.datastore.generated.model.Task;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,3 +72,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TasksViewHolde
     }
 
 }
+
+
+

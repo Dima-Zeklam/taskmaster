@@ -113,3 +113,56 @@ Task Master is an android application for android users to manage their tasks.
 
 ![TaskDetailsTaskThree](screenshots/TaskDetailsTaskThree.png)
 
+## Lab: 32 - Amplify and DynamoDB
+* Using the `amplify add api command`, create a Task resource that replicates our existing Task schema.
+* Update all references to the Task data to instead use AWS Amplify to access your data in DynamoDB instead of in Room.
+* Modify Add Task Page - When add the Task and Click Add Task button will save the data entered in as a Task to DynamoDB.
+* Refactor Home Page RecyclerView to display all Task entities in DynamoDB.
+
+* Home Page after add four tasks
+![HomePage](HomePage_32.png)
+
+* Add Task Page - here can entered the tasks and will added to data base.
+![AddTask](AddTask_32.png)
+
+* Task Details page - when users clicked on any task fom RecyclerView (At home page) it will display in this page
+![TaskDetails](TaskDetails_32.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

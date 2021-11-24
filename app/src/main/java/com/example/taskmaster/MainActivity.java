@@ -1,5 +1,6 @@
 package com.example.taskmaster;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -7,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -14,36 +18,30 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.amplifyframework.AmplifyException;
-import com.amplifyframework.api.ApiOperation;
 import com.amplifyframework.api.aws.AWSApiPlugin;
-import com.amplifyframework.api.graphql.model.ModelSubscription;
+import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
-import com.amplifyframework.datastore.AWSDataStorePlugin;
-import com.amplifyframework.datastore.DataStoreException;
+import com.amplifyframework.datastore.generated.model.Task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTasksListener{
-    private RecyclerView mRecyclerView;
-    private ArrayList<Task> tasksList = new ArrayList<>();
-    private static final String TAG = "Main Activity";
-    private TaskAdapter taskAdapterObject;
+
+    AtomicReference<List<Task>> tasksList = new AtomicReference<>(new ArrayList<>());
+    private RecyclerView recyclerView;
+    private Handler handler;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        try {
-            Amplify.addPlugin(new AWSDataStorePlugin()); // stores records locally
-            Amplify.addPlugin(new AWSApiPlugin()); // stores things in DynamoDB and allows us to perform GraphQL queries
-            Amplify.configure(getApplicationContext());
 
-            Log.i(TAG, "Initialized Amplify");
-        } catch (AmplifyException error) {
-            Log.e(TAG, "Could not initialize Amplify", error);
-        }
+
+        //Add task button
         Button AddTask= findViewById(R.id.AddTaskButton);
-
         AddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
             }
         });
 
+        //allTasks
         Button AllTasks= findViewById(R.id.AllTasksButton);
         AllTasks.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,71 +59,46 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
                 startActivity(AllTaskIntent);
             }
         });
-//        Button button1= findViewById(R.id.button1);
-//        button1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String titleOne = "Title One";
-//
-//                Intent AllTaskIntent = new Intent(MainActivity.this,TaskDetail.class);
-//                AllTaskIntent.putExtra("title",titleOne);
-//                startActivity(AllTaskIntent);
-//
-//            }
-//        });
-//        Button button2= findViewById(R.id.button2);
-//        button2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String titleTwo = "Title two";
-//                Intent AllTaskIntent = new Intent(MainActivity.this,TaskDetail.class);
-//                AllTaskIntent.putExtra("title",titleTwo);
-//                startActivity(AllTaskIntent);
-//            }
-//        });
-//        Button button3= findViewById(R.id.button3);
-//        button3.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String titleThree = "Title Three";
-//                Intent AllTaskIntent = new Intent(MainActivity.this,TaskDetail.class);
-//                AllTaskIntent.putExtra("title",titleThree);
-//                startActivity(AllTaskIntent);
-//            }
-//        });
 
-
-    Button settingButton = findViewById(R.id.settingButton);
+        //Setting button
+        Button settingButton = findViewById(R.id.settingButton);
         settingButton.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent AllTaskIntent = new Intent(MainActivity.this,Settings.class);
-            startActivity(AllTaskIntent);
-        }
-    });
-//
+            @Override
+            public void onClick(View v) {
+                Intent AllTaskIntent = new Intent(MainActivity.this,Settings.class);
+                startActivity(AllTaskIntent);
+            }
+        });
+
 //        List<TaskModel> allTasks = new ArrayList<TaskModel>();
 //        allTasks.add(new TaskModel("Task one ","Do workout","new"));
 //        allTasks.add(new TaskModel("Task two","Do Assignments","assigned"));
 //        allTasks.add(new TaskModel("Task three","Write the blog","progress"));
 //        allTasks.add(new TaskModel("Task four","Drive the car","complete"));
-        AppDatabase appDb = AppDatabase.getInstance(getApplicationContext());
-        TaskDAO taskDao = appDb.taskDao();
-        List<Task> tasks = taskDao.getAll();
+//        AppDatabase appDb = AppDatabase.getInstance(getApplicationContext());
+//        TaskDAO taskDao = appDb.taskDao();
+//        List<Task> tasks = taskDao.getAll();
 
-        System.out.println("tasks:::::::::::: "+tasks.size());
-        RecyclerView recyclerView = findViewById(R.id.allTasksRecycleView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new TaskAdapter(tasks,this));
+//
+//        TaskAdapter taskAdapter = new TaskAdapter(Tasks, this);
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+//        linearLayoutManager.canScrollVertically();
+//        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//        recyclerView.setLayoutManager(linearLayoutManager);
+//        recyclerView.setAdapter(taskAdapter);
+        try {
+            // Add these lines to add the AWSApiPlugin plugins
+            Amplify.addPlugin(new AWSApiPlugin());
+            Amplify.configure(getApplicationContext());
 
-        ApiOperation subscription = Amplify.API.subscribe(
-                ModelSubscription.onCreate(Task.class),
-                onEstablished -> Log.i("ApiQuickStart", "Subscription established"),
-                onCreated -> Log.i("ApiQuickStart", "Todo create subscription received: " + ((Task) onCreated.getData()).getBody()),
-                onFailure -> Log.e("ApiQuickStart", "Subscription failed", onFailure),
-                () -> Log.i("ApiQuickStart", "Subscription completed")
-        );
-}
+            Log.i("MyAmplifyApp", "Initialized Amplify");
+        } catch (AmplifyException error) {
+            Log.e("MyAmplifyApp", "Could not initialize Amplify", error);
+        }
+    }//OnCreate
+
+    ArrayList<Task> tasksArray =new  ArrayList<>();
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -134,6 +108,39 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
 
         userNameText.setText(userName+ "'s Tasks");
 
+
+        handler = new Handler(Looper.getMainLooper(),
+                new Handler.Callback() {
+                    @Override
+                    public boolean handleMessage(@NonNull Message message) {
+                        recyclerView.getAdapter().notifyDataSetChanged();
+                        return false;
+                    }
+                });
+
+        Amplify.API.query(
+                ModelQuery.list(Task.class),
+                response -> {
+                    for (Task task : response.getData()) {
+                        Log.i("MyAmplifyApp", task.getTitle());
+                        tasksArray.add(task);
+
+                    }
+                    tasksList.set(tasksArray);
+                    System.out.println(tasksList);
+
+                },
+                error -> Log.e("MyAmplifyApp", "Query failure", error)
+        );
+        setTaskAdapter();
+        System.out.println("tasks:::::::::::: "+tasksArray);
+        System.out.println("tasks:::::::::::: "+tasksArray.size());
+    }
+
+    public void setTaskAdapter(){
+        recyclerView = findViewById(R.id.allTasksRecycleView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new TaskAdapter(tasksArray, this));
     }
 
     @Override
@@ -145,3 +152,4 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
         startActivity(intent);
     }
 }
+
