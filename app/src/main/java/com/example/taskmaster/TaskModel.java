@@ -1,13 +1,15 @@
 package com.example.taskmaster;
 
+
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
 public class TaskModel {
-// title, a body, and a state
-   @PrimaryKey(autoGenerate = true)
+    // title, a body, and a state
+    @PrimaryKey(autoGenerate = true)
     public long id;
     @ColumnInfo(name = "title")
     public String title;

@@ -8,21 +8,40 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.amplifyframework.AmplifyException;
+import com.amplifyframework.api.ApiOperation;
+import com.amplifyframework.api.aws.AWSApiPlugin;
+import com.amplifyframework.api.graphql.model.ModelSubscription;
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.AWSDataStorePlugin;
+import com.amplifyframework.datastore.DataStoreException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTasksListener{
     private RecyclerView mRecyclerView;
-    private ArrayList<TaskModel> tasksList = new ArrayList<>();
+    private ArrayList<Task> tasksList = new ArrayList<>();
+    private static final String TAG = "Main Activity";
     private TaskAdapter taskAdapterObject;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        try {
+            Amplify.addPlugin(new AWSDataStorePlugin()); // stores records locally
+            Amplify.addPlugin(new AWSApiPlugin()); // stores things in DynamoDB and allows us to perform GraphQL queries
+            Amplify.configure(getApplicationContext());
+
+            Log.i(TAG, "Initialized Amplify");
+        } catch (AmplifyException error) {
+            Log.e(TAG, "Could not initialize Amplify", error);
+        }
         Button AddTask= findViewById(R.id.AddTaskButton);
 
         AddTask.setOnClickListener(new View.OnClickListener() {
@@ -91,14 +110,20 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
 //        allTasks.add(new TaskModel("Task four","Drive the car","complete"));
         AppDatabase appDb = AppDatabase.getInstance(getApplicationContext());
         TaskDAO taskDao = appDb.taskDao();
-        List<TaskModel> tasks = taskDao.getAll();
+        List<Task> tasks = taskDao.getAll();
 
         System.out.println("tasks:::::::::::: "+tasks.size());
         RecyclerView recyclerView = findViewById(R.id.allTasksRecycleView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new TaskAdapter(tasks,this));
 
-
+        ApiOperation subscription = Amplify.API.subscribe(
+                ModelSubscription.onCreate(Task.class),
+                onEstablished -> Log.i("ApiQuickStart", "Subscription established"),
+                onCreated -> Log.i("ApiQuickStart", "Todo create subscription received: " + ((Task) onCreated.getData()).getBody()),
+                onFailure -> Log.e("ApiQuickStart", "Subscription failed", onFailure),
+                () -> Log.i("ApiQuickStart", "Subscription completed")
+        );
 }
     @Override
     protected void onResume() {
@@ -112,11 +137,11 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
     }
 
     @Override
-    public void onTaskClick(int position, TaskModel task) {
+    public void onTaskClick(int position, Task task) {
         Intent intent = new Intent(this, TaskDetail.class);
-        intent.putExtra("title",task.title);
-        intent.putExtra("body",task.body);
-        intent.putExtra("state",task.state);
+        intent.putExtra("title",task.getTitle());
+        intent.putExtra("body",task.getBody());
+        intent.putExtra("state",task.getState());
         startActivity(intent);
     }
 }
