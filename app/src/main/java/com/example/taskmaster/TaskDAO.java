@@ -8,14 +8,14 @@ import java.util.List;
 
 @Dao
 public interface TaskDAO {
-    @Query("SELECT * FROM taskModel")
-    List<TaskModel> getAll();
+    @Query("SELECT * FROM Task")
+    List<Task> getAll();
 
 
 //    @Query("Select * FROM taskModel WHERE id = :id")
 //    TaskModel getTaskById(long id);
     @Insert
-    void insertAll(TaskModel... tasks);
+    void insertAll(Task... tasks);
 
 
 }

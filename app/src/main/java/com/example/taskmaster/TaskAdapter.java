@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TasksViewHolder> {
-    List<TaskModel> allTasks = new ArrayList<TaskModel>();
+    List<Task> allTasks = new ArrayList<Task>();
     private OnTasksListener mOnTasksListener;
 
 
-    public TaskAdapter(List<TaskModel> allTasks, OnTasksListener mOnTasksListener) {
+    public TaskAdapter(List<Task> allTasks, OnTasksListener mOnTasksListener) {
         this.allTasks = allTasks;
         this.mOnTasksListener = mOnTasksListener;
     }
@@ -21,7 +21,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TasksViewHolde
 
 
     public static class TasksViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener{
-        public TaskModel task;
+        public Task task;
         public View itemView;
         public OnTasksListener mOnTasksListener;
 
@@ -53,9 +53,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TasksViewHolde
         TextView body = holder.itemView.findViewById(R.id.mbody);
         TextView state = holder.itemView.findViewById(R.id.mState);
 
-        title.setText(holder.task.title);
-        body.setText(holder.task.body);
-        state.setText(holder.task.state);
+        title.setText(holder.task.getTitle());
+        body.setText(holder.task.getBody());
+        state.setText(holder.task.getState());
 
 
     }
@@ -65,7 +65,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TasksViewHolde
         return allTasks.size();
     }
     public interface OnTasksListener{
-        void onTaskClick(int position,TaskModel task);
+        void onTaskClick(int position, Task task);
     }
 
 }
