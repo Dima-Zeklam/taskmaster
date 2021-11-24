@@ -113,3 +113,5 @@ Task Master is an android application for android users to manage their tasks.
 
 ![TaskDetailsTaskThree](screenshots/TaskDetailsTaskThree.png)
 
+## Lab: 32 - Amplify and DynamoDB
+Update all references to the Task data to instead use AWS Amplify to access your data in DynamoDB instead of in Room.
