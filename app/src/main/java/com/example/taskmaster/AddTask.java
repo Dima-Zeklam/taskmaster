@@ -2,65 +2,117 @@ package com.example.taskmaster;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amplifyframework.api.graphql.model.ModelMutation;
+import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
+import com.amplifyframework.datastore.generated.model.Team;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class AddTask extends AppCompatActivity {
-//    private RecyclerView recyclerView;
-//    private Handler handler;
-//    private TaskAdapter taskAdapter;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_task);
-         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_add_task);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-         Button SubmitButton = findViewById(R.id.Submit);
-         SubmitButton.setOnClickListener(new View.OnClickListener() {
-             int countTasks =0 ;
-                    @Override
-                    public void onClick(View v) {
-                        EditText title = findViewById(R.id.editTitle);
-                        String GetTitle = title.getText().toString();
-                        EditText body = findViewById(R.id.editBody);
-                        String GetBody = body.getText().toString();
-                        EditText state = findViewById(R.id.editState);
-                        String GetState = state.getText().toString();
-                        Toast.makeText(getApplicationContext(),"submitted!",Toast.LENGTH_LONG).show();
-                        countTasks++;
-                        TextView tasksNum = findViewById(R.id.taskNum);
-                        TaskModel task = new TaskModel(GetTitle,GetBody,GetState);
-                        tasksNum.setText(String.valueOf(countTasks));
-                        //AppDatabase appDb = AppDatabase.getInstance(getApplicationContext());
-                        // appDb.taskDao().insertAll(task);
+    List<Team> allTeam = new ArrayList<>();
+    RadioButton team1 = findViewById(R.id.radioButtonTeam1);
+    RadioButton team2 = findViewById(R.id.radioButtonTeam2);
+    RadioButton team3 = findViewById(R.id.radioButtonTeam3);
+    Amplify.API.query(
+            ModelQuery.list(Team.class),
+            response -> {
+                for (Team team : response.getData()) {
+                    Log.i("MyAmplifyApp", team.getName());
+                    allTeam.add(team);
 
-                        Task tasks = Task.builder()
-                                .title(title.getText().toString())
-                                .body(body.getText().toString())
-                                .state(state.getText().toString())
-                                .build();
+                    System.out.println("here is the data all team " + allTeam);
 
-                        Amplify.API.mutate(
-                                ModelMutation.create(tasks),
-                                response -> Log.i("MyAmplifyApp", "Added Todo with id: " + response.getData().getId()
-                                ),
+                }
+                Log.i("MyAmplifyApp", "outside the loop");
+            },
+            error -> Log.e("MyAmplifyApp", "Query failure", error)
+    );
 
-                                error -> Log.e("MyAmplifyApp", "Create failed", error)
-                        );
+    Button SubmitButton = findViewById(R.id.Submit);
+    SubmitButton.setOnClickListener(new View.OnClickListener() {
+        int countTasks =0 ;
+        @Override
+        public void onClick(View v) {
+            EditText title = findViewById(R.id.editTitle);
+            String GetTitle = title.getText().toString();
+            EditText body = findViewById(R.id.editBody);
+            String GetBody = body.getText().toString();
+            EditText state = findViewById(R.id.editState);
+            String GetState = state.getText().toString();
+            Toast.makeText(getApplicationContext(),"submitted!",Toast.LENGTH_LONG).show();
+            countTasks++;
+            TextView tasksNum = findViewById(R.id.taskNum);
+//            TaskModel task = new TaskModel(GetTitle,GetBody,GetState);
+            tasksNum.setText(String.valueOf(countTasks));
+            //AppDatabase appDb = AppDatabase.getInstance(getApplicationContext());
+            // appDb.taskDao().insertAll(task);
 
-                   }
+            String teamName = "";
+            if (team1.isChecked()) {
 
-                });
-    }
+                teamName = team1.getText().toString();
+
+            } else if (team2.isChecked()) {
+
+                teamName = team2.getText().toString();
+
+
+            } else if (team3.isChecked()) {
+
+                teamName = team3.getText().toString();
+
+            }
+            Team selectedTeam = null;
+            for (Team teams : allTeam) {
+                if (teams.getName().equals(teamName)) {
+                    selectedTeam = teams;
+
+
+                }
+
+            }
+
+
+
+            Task tasks = Task.builder()
+                    .title(title.getText().toString())
+                    .body(body.getText().toString()).team(selectedTeam)
+                    .state(state.getText().toString())
+                    .build();
+
+            Amplify.API.mutate(
+                    ModelMutation.create(tasks),
+                    response2 -> Log.i("MyAmplifyApp", "Added Todo with id: " + response2.getData().getId()
+                    ),
+
+                    error -> Log.e("MyAmplifyApp", "Create failed", error)
+            );
+
+        }
+
+    });
+}
 }

@@ -120,13 +120,31 @@ Task Master is an android application for android users to manage their tasks.
 * Refactor Home Page RecyclerView to display all Task entities in DynamoDB.
 
 * Home Page after add four tasks
-![HomePage](HomePage_32.png)
+![HomePage](screenshots/HomePage_32.png)
 
 * Add Task Page - here can entered the tasks and will added to data base.
-![AddTask](AddTask_32.png)
+![AddTask](screenshots/AddTask_32.png)
 
 * Task Details page - when users clicked on any task fom RecyclerView (At home page) it will display in this page
-![TaskDetails](TaskDetails_32.png)
+![TaskDetails](screenshots/TaskDetails_32.png)
+
+
+## Lab33
+* Create a second Model Called a Team, Create relation between Task and Team (Update your tasks to be owned by a team).
+* create three teams  Manually.
+* Modify the add Task Page to include Radio Buttons for which team that task belongs to.
+* Modify Settings page to allow the user to choose their team
+* display only that team’s tasks on the homepage.
+
+* Add Task Page - When user add the task have to choose on of the three team's which team that task will be belongs to.
+![Add Task For Team 1](screenshots/AddTaskForTeam1.png)
+
+* Setting Page - user can add user name and select their team .
+ ![Setting Page For Selected Team](screenshots/SettingPageForSelectedTeam.png)
+
+* Home Page - will display the team name that the user selected from setting and display the tasks belongs to it.
+![Home Page](screenshots/HomePageTeam1.png)
+
 
 
 

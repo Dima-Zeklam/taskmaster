@@ -9,14 +9,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.amplifyframework.datastore.generated.model.Task;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TasksViewHolder> {
-    List<Task> allTasks = new ArrayList<Task>();
+    ArrayList<Task> allTasks = new ArrayList<>();
     private OnTasksListener mOnTasksListener;
 
 
-    public TaskAdapter(List<Task> allTasks, OnTasksListener mOnTasksListener) {
+    public TaskAdapter(ArrayList<Task> allTasks, OnTasksListener mOnTasksListener) {
         this.allTasks = allTasks;
         this.mOnTasksListener = mOnTasksListener;
     }
@@ -51,6 +53,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TasksViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull TasksViewHolder holder, int position) {
+//        List<Task> list = new ArrayList<Task>(allTasks);
         holder.task = allTasks.get(position);
         TextView title = holder.itemView.findViewById(R.id.mTitle);
         TextView body = holder.itemView.findViewById(R.id.mbody);
