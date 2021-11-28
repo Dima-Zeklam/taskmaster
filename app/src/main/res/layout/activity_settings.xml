@@ -65,7 +65,7 @@
             android:id="@+id/radioButtonNum1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="team 1" />
+            android:text="team 1 " />
 
         <RadioButton
             android:id="@+id/radioButtonNum2"
@@ -77,7 +77,7 @@
             android:id="@+id/radioButtonNum3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="team3" />
+            android:text="team 3" />
     </RadioGroup>
 
     <TextView

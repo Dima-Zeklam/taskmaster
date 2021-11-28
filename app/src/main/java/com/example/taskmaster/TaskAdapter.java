@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.Set;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TasksViewHolder> {
-    Set<Task> allTasks = new HashSet<>();
+    ArrayList<Task> allTasks = new ArrayList<>();
     private OnTasksListener mOnTasksListener;
 
 
-    public TaskAdapter(HashSet<Task> allTasks, OnTasksListener mOnTasksListener) {
+    public TaskAdapter(ArrayList<Task> allTasks, OnTasksListener mOnTasksListener) {
         this.allTasks = allTasks;
         this.mOnTasksListener = mOnTasksListener;
     }
@@ -53,8 +53,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TasksViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull TasksViewHolder holder, int position) {
-        List<Task> list = new ArrayList<Task>(allTasks);
-        holder.task = list.get(position);
+//        List<Task> list = new ArrayList<Task>(allTasks);
+        holder.task = allTasks.get(position);
         TextView title = holder.itemView.findViewById(R.id.mTitle);
         TextView body = holder.itemView.findViewById(R.id.mbody);
         TextView state = holder.itemView.findViewById(R.id.mState);
