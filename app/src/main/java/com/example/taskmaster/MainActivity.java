@@ -21,6 +21,8 @@ import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.auth.AuthProvider;
+import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.Team;
@@ -31,6 +33,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Logger;
 
 public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTasksListener{
 
@@ -44,7 +47,47 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        configure();
+        try {
+            // Add these lines to add the AWSApiPlugin plugins
+            Amplify.addPlugin(new AWSApiPlugin());
+            Amplify.addPlugin(new AWSCognitoAuthPlugin());
+            Amplify.configure(getApplicationContext());
+
+            Log.i("MyAmplifyApp", "Initialized Amplify");
+        } catch (AmplifyException error) {
+            Log.e("MyAmplifyApp", "Could not initialize Amplify", error);
+        }
+
+Button Login = findViewById(R.id.login);
+        Login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Amplify.Auth.fetchAuthSession(
+                        result ->{
+                            if(result.isSignedIn()){
+                                Amplify.Auth.signOut(
+
+                                        () -> Log.i("AuthQuickstart", "Signed out successfully"),
+                                        error -> Log.e("AuthQuickstart", error.toString())
+                                );
+                                Login.setText("sign in");
+                            }
+                            else{
+
+                                Amplify.Auth.signInWithWebUI(
+                                        MainActivity.this,
+                                        result1 -> Log.i("AuthQuickStart", result1.toString()),
+                                        error -> Log.e("AuthQuickStart", error.toString())
+
+                                );
+
+                            }
+                        },
+                        error -> Log.e("AmplifyQuickstart", error.toString())
+                );
+                 Login.setText("sign out");
+            }
+        });
 
         //Add task button
         Button AddTask= findViewById(R.id.AddTaskButton);
@@ -76,6 +119,38 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
             }
         });
 
+
+//        Team team = Team.builder()
+//                .name("team 1")
+//                .build();
+//
+//        Amplify.API.mutate(
+//                ModelMutation.create(team),
+//                response -> Log.i("MyAmplifyApp", "Added Task with id: " + response.getData().getId()),
+//                error -> Log.e("MyAmplifyApp", "Create failed", error)
+//        );
+
+
+//        Team teamTow = Team.builder()
+//                .name("team 2")
+//                .build();
+//
+//        Amplify.API.mutate(
+//                ModelMutation.create(teamTow),
+//                response -> Log.i("MyAmplifyApp", "Added Task with id: " + response.getData().getId()),
+//                error -> Log.e("MyAmplifyApp", "Create failed", error)
+//        );
+//
+//
+//        Team teamThree = Team.builder()
+//                .name("team 3")
+//                .build();
+//
+//        Amplify.API.mutate(
+//                ModelMutation.create(teamThree),
+//                response -> Log.i("MyAmplifyApp", "Added Task with id: " + response.getData().getId()),
+//                error -> Log.e("MyAmplifyApp", "Create failed", error)
+//        );
     }//OnCreate
 
     ArrayList<Task> tasksArray = new ArrayList<>();
@@ -114,29 +189,15 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
                         tasksArray.add(task);
                     }
 
-                    // Index 5 & 6 & 7 & 10 & 11 & 12 skipped because they are null Team Object at the database (from Previous lab )
 
-                    for (int i = 1;  i < 5 ; i++) {
+                    for (int i = 0;  i < tasksArray.size()  ; i++) {
 //                        System.out.println("Name222222#################  " +  tasksArray.get(i).getTeam().getName());
 //                        System.out.println("Name#################  " + tasksArray.get(i).getTeam().getName().equals(teamNameString));
                         if (tasksArray.get(i).getTeam().getName().equals(teamNameString)) {
 //                            Log.i("ADDING ", "ADDDDD");
                             team.add(tasksArray.get(i));
                         }
-//                            }
-//                        System.out.println("Name222222#################  " +  tasksArray.get(i).getTeam().getName());
-//                        System.out.println("Name#################  " + tasksArray.get(i).getTeam().getName().equals(teamNameString));
-                    }
-                    for (int i = 8;  i < 10 ; i++) {
-                        if (tasksArray.get(i).getTeam().getName().equals(teamNameString)) {
-                            team.add(tasksArray.get(i));
-                        }
 
-                    }
-                    for (int i = 13;  i < tasksArray.size() ; i++) {
-                        if (tasksArray.get(i).getTeam().getName().equals(teamNameString)) {
-                            team.add(tasksArray.get(i));
-                        }
 
                     }
 
@@ -150,7 +211,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
         );
 
         setTaskAdapter();
-//                team.clear();
         System.out.println("TEamssss::::::::::::"+ team);
         System.out.println("tasks:::::::::::: "+tasksArray);
         System.out.println("tasks:::::::::::: "+tasksArray.size());
@@ -172,51 +232,5 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
         startActivity(intent);
     }
 
-    private void configure() {
-        try {
-//        Log.i("MyAmplifyApp", "Initialized Amplify");
-//        Team team = Team.builder()
-//                .name("team 1 ")
-//                .build();
-//
-//        Amplify.API.mutate(
-//                ModelMutation.create(team),
-//                response -> Log.i("MyAmplifyApp", "Added Task with id: " + response.getData().getId()),
-//                error -> Log.e("MyAmplifyApp", "Create failed", error)
-//        );
-//
-//        ///second team
-//
-//        Team teamTow = Team.builder()
-//                .name("team 2")
-//                .build();
-//
-//        Amplify.API.mutate(
-//                ModelMutation.create(teamTow),
-//                response -> Log.i("MyAmplifyApp", "Added Task with id: " + response.getData().getId()),
-//                error -> Log.e("MyAmplifyApp", "Create failed", error)
-//        );
-//
-//        ////third team hard coby
-//
-//        Team teamThree = Team.builder()
-//                .name("team 3")
-//                .build();
-//
-//        Amplify.API.mutate(
-//                ModelMutation.create(teamThree),
-//                response -> Log.i("MyAmplifyApp", "Added Task with id: " + response.getData().getId()),
-//                error -> Log.e("MyAmplifyApp", "Create failed", error)
-//        );
-
-            // Add these lines to add the AWSApiPlugin plugins
-            Amplify.addPlugin(new AWSApiPlugin());
-            Amplify.configure(getApplicationContext());
-
-            Log.i("MyAmplifyApp", "Initialized Amplify");
-        } catch (AmplifyException error) {
-            Log.e("MyAmplifyApp", "Could not initialize Amplify", error);
-        }
-    }
 }
 

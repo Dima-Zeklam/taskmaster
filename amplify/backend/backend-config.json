@@ -9,13 +9,18 @@
             "authenticationType": "API_KEY",
             "apiKeyConfig": {
               "apiKeyExpirationDays": 365,
-              "apiKeyExpirationDate": "2022-11-27T13:39:33.896Z",
+              "apiKeyExpirationDate": "2022-11-28T12:24:55.407Z",
               "description": "d5key"
             }
           },
           "additionalAuthenticationProviders": []
         }
       }
+    }
+  },
+  "auth": {
+    "taskmastera00800a4": {
+      "dependsOn": []
     }
   }
 }
