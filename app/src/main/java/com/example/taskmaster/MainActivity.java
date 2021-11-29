@@ -161,7 +161,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
 //                response -> Log.i("MyAmplifyApp", "Added Task with id: " + response.getData().getId()),
 //                error -> Log.e("MyAmplifyApp", "Create failed", error)
 //        );
-
     }//OnCreate
 
 
@@ -185,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
 
         }
         else{
-            userNameText.setText("no username!"+ "'s Tasks");
+            userNameText.setText("no username yet!"+ "'s Tasks");
 
         }
 

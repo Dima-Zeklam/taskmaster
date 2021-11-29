@@ -148,15 +148,16 @@ Task Master is an android application for android users to manage their tasks.
 
 ## Lab36 -
 * Add Cognito to Amplify setup. Add in user login and sign up flows to the application.
+* Display the logged in user’s username in Home Page.
 * Allow users to log out of your application.
 
 * At home page - have Login button directed you to sign up and login flow 
 ![Homesignin](screenshots/Homesignin.png)
 
-![Homesignin](screenshots/signinpage.png)
+![Homesignin](screenshots/Signin.png)
 
 * after sign in the button at home page converted to sign out to allow users to log out of application.
-![Homesignin](screenshots/signout.png)
+![Homesignin](screenshots/SignOut.png)
 
 
 
