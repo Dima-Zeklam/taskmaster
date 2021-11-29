@@ -65,7 +65,7 @@
             android:id="@+id/radioButtonNum1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="team 1 " />
+            android:text="team 1" />
 
         <RadioButton
             android:id="@+id/radioButtonNum2"
@@ -91,4 +91,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.405" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
