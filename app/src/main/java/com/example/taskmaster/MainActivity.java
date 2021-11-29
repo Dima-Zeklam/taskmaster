@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.api.graphql.model.ModelMutation;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Button Login = findViewById(R.id.login);
         try {
             // Add these lines to add the AWSApiPlugin plugins
             Amplify.addPlugin(new AWSApiPlugin());
@@ -57,8 +58,14 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
         } catch (AmplifyException error) {
             Log.e("MyAmplifyApp", "Could not initialize Amplify", error);
         }
+        if (AWSMobileClient.getInstance().isSignedIn()){
+            Login.setText("sign out");
 
-Button Login = findViewById(R.id.login);
+        }
+        else{
+            Login.setText("sign in");
+        }
+        TextView userNameText = findViewById(R.id.userName);
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,8 +93,11 @@ Button Login = findViewById(R.id.login);
                         error -> Log.e("AmplifyQuickstart", error.toString())
                 );
                  Login.setText("sign out");
+
             }
         });
+
+
 
         //Add task button
         Button AddTask= findViewById(R.id.AddTaskButton);
@@ -153,6 +163,8 @@ Button Login = findViewById(R.id.login);
 //        );
     }//OnCreate
 
+
+
     ArrayList<Task> tasksArray = new ArrayList<>();
 
     @Override
@@ -165,9 +177,16 @@ Button Login = findViewById(R.id.login);
         String teamNameString = sharedPreferences.getString("teamName", "team name");
         TextView teamNameView = findViewById(R.id.teamNameId);
         teamNameView.setText(teamNameString);
+      Button  Login = findViewById(R.id.login);
+//        userNameText.setText(userName+ "'s Tasks");
+        if (AWSMobileClient.getInstance().isSignedIn()){
+            userNameText.setText(AWSMobileClient.getInstance().getUsername().toString() +"'s Tasks");
 
-        userNameText.setText(userName+ "'s Tasks");
+        }
+        else{
+            userNameText.setText("no username yet!"+ "'s Tasks");
 
+        }
 
         handler = new Handler(Looper.getMainLooper(),
                 new Handler.Callback() {
