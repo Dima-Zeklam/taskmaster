@@ -14,6 +14,12 @@
     "categories": {
       "auth": {
         "taskmastera00800a4": {}
+      },
+      "function": {
+        "S3Triggerb1ca0012": {
+          "deploymentBucketName": "amplify-taskmaster-dev-225250-deployment",
+          "s3Key": "amplify-builds/S3Triggerb1ca0012-574b347a68754675674e-build.zip"
+        }
       }
     }
   }

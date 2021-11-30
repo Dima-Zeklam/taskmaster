@@ -9,7 +9,7 @@
             "authenticationType": "API_KEY",
             "apiKeyConfig": {
               "apiKeyExpirationDays": 365,
-              "apiKeyExpirationDate": "2022-11-28T12:24:55.407Z",
+              "apiKeyExpirationDate": "2022-11-30T00:20:19.088Z",
               "description": "d5key"
             }
           },
@@ -21,6 +21,30 @@
   "auth": {
     "taskmastera00800a4": {
       "dependsOn": []
+    }
+  },
+  "function": {
+    "S3Triggerb1ca0012": {
+      "service": "Lambda",
+      "providerPlugin": "awscloudformation",
+      "build": true
+    }
+  },
+  "storage": {
+    "s3bc3d92cf": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "S3Triggerb1ca0012",
+          "attributes": [
+            "Name",
+            "Arn",
+            "LambdaExecutionRole"
+          ]
+        }
+      ]
     }
   }
 }
