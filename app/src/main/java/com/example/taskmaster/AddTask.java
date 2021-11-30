@@ -1,14 +1,18 @@
 package com.example.taskmaster;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +23,11 @@ import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.Team;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +40,13 @@ protected void onCreate(Bundle savedInstanceState) {
     setContentView(R.layout.activity_add_task);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+    Button attachFile = findViewById(R.id.uploadFile);
+    attachFile.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            getFile();
+        }
+    });
 
     List<Team> allTeam = new ArrayList<>();
     RadioButton team1 = findViewById(R.id.radioButtonTeam1);
@@ -99,7 +115,9 @@ protected void onCreate(Bundle savedInstanceState) {
 
             Task tasks = Task.builder()
                     .title(title.getText().toString())
-                    .body(body.getText().toString()).team(selectedTeam)
+                    .body(body.getText().toString())
+                    .team(selectedTeam)
+                    .file(file)
                     .state(state.getText().toString())
                     .build();
 
@@ -110,9 +128,67 @@ protected void onCreate(Bundle savedInstanceState) {
 
                     error -> Log.e("MyAmplifyApp", "Create failed", error)
             );
+            Intent intent = getIntent();
+            String act = intent.getAction();
+            String getType = intent.getType();
+            ImageView image = findViewById(R.id.imageViewUplod);
 
+            if (Intent.ACTION_SEND.equals(act) && getType != null) {
+
+                if (getType.startsWith("image/")) {
+                    Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+
+                    if (imageUri != null) {
+                        image.setImageURI(imageUri);
+                        image.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+            Intent goToHomePage = new Intent(AddTask.this, MainActivity.class);
+            startActivity(goToHomePage);
         }
-
     });
+
 }
+    String file = "";
+    private void getFile() {
+        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+        chooseFile.setType("*/*");
+        chooseFile = Intent.createChooser(chooseFile, "Choose a File");
+        startActivityForResult(chooseFile, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        File uploadFile = new File(getApplicationContext().getFilesDir(), "uploadFileCopied");
+        try {
+            byte[] buffer = new byte[1024];
+            int length;
+            InputStream inputStream = getContentResolver().openInputStream(data.getData());
+            OutputStream outputStream = new FileOutputStream(uploadFile);
+
+            file = data.getData().toString();
+
+
+            while ((length = inputStream.read(buffer)) > 0) {
+
+                outputStream.write(buffer, 0, length);
+            }
+
+            inputStream.close();
+            outputStream.close();
+
+
+            Amplify.Storage.uploadFile(
+                    "image",
+                    uploadFile,
+                    result -> Log.i("MyAmplifyApp", "Successfully uploaded: " + result.getKey()),
+                    storageFailure -> Log.e("MyAmplifyApp", "Upload failed", storageFailure)
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }}
+
 }

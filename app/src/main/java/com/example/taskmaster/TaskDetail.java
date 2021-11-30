@@ -2,8 +2,15 @@ package com.example.taskmaster;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.amplifyframework.core.Amplify;
+
+import java.io.File;
 
 public class TaskDetail extends AppCompatActivity {
 
@@ -23,7 +30,20 @@ public class TaskDetail extends AppCompatActivity {
         body.setText(strbody);
         state.setText(strState);
 
+        Amplify.Storage.downloadFile(
+                "image",
+                new File(getApplicationContext().getFilesDir() + "/download.jpg"),
+                result -> {
+                    ImageView image = findViewById(R.id.imgTaskDetails);
+                    getIntent().getExtras().getString("img");
+                    image.setImageBitmap(BitmapFactory.decodeFile(result.getFile().getPath()));
+
+                    Log.i("MyAmplifyApp", "Successfully downloaded: " + result.getFile());
+                },
+                error -> Log.e("MyAmplifyApp", "Download Failure", error)
+        );
     }
+
 }
 
 

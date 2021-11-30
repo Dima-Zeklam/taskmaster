@@ -159,6 +159,27 @@ Task Master is an android application for android users to manage their tasks.
 * after sign in the button at home page converted to sign out to allow users to log out of application.
 ![Homesignin](screenshots/SignOut.png)
 
+# Lab 37 - S3 Uploads
+* On Add Task activity, allow users to optionally select a file to attach to that task. 
+* When a user attaches a file to a task, that file should be uploaded to S3, and associated with that task.
+
+* Update Add Task page 
+![AddTask](screenshots/AddTask37.png)
+* When click on upload file button will navigate you to select file:
+![uploadFile](screenshots/uploadFile.png)
+
+* Home page that consist the tasks, when you cklick any task will navigate you to /task details page.
+![uploadFile](screenshots/HPTeam2.png)
+![uploadFile](screenshots/HPTeam3.png)
+* the uploded file displayed in task details for specific task.
+![uploadFile](screenshots/TDpage.png)
+
+
+
+
+
+
+
 
 
 
