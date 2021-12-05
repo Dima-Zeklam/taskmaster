@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -29,7 +30,11 @@ import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.Team;
 import com.amplifyframework.storage.s3.AWSS3StoragePlugin;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -37,7 +42,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
-public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTasksListener{
+
+public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTasksListener {
 
     AtomicReference<List<Task>> tasksList = new AtomicReference<>(new ArrayList<>());
     private RecyclerView recyclerView;
@@ -60,11 +66,10 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
         } catch (AmplifyException error) {
             Log.e("MyAmplifyApp", "Could not initialize Amplify", error);
         }
-        if (AWSMobileClient.getInstance().isSignedIn()){
+        if (AWSMobileClient.getInstance().isSignedIn()) {
             Login.setText("sign out");
 
-        }
-        else{
+        } else {
             Login.setText("sign in");
         }
         TextView userNameText = findViewById(R.id.userName);
@@ -72,16 +77,15 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
             @Override
             public void onClick(View v) {
                 Amplify.Auth.fetchAuthSession(
-                        result ->{
-                            if(result.isSignedIn()){
+                        result -> {
+                            if (result.isSignedIn()) {
                                 Amplify.Auth.signOut(
 
                                         () -> Log.i("AuthQuickstart", "Signed out successfully"),
                                         error -> Log.e("AuthQuickstart", error.toString())
                                 );
                                 Login.setText("sign in");
-                            }
-                            else{
+                            } else {
 
                                 Amplify.Auth.signInWithWebUI(
                                         MainActivity.this,
@@ -94,29 +98,28 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
                         },
                         error -> Log.e("AmplifyQuickstart", error.toString())
                 );
-                 Login.setText("sign out");
+                Login.setText("sign out");
 
             }
         });
 
 
-
         //Add task button
-        Button AddTask= findViewById(R.id.AddTaskButton);
+        Button AddTask = findViewById(R.id.AddTaskButton);
         AddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent AddTaskIntent = new Intent(MainActivity.this,AddTask.class);
+                Intent AddTaskIntent = new Intent(MainActivity.this, AddTask.class);
                 startActivity(AddTaskIntent);
             }
         });
 
         //allTasks
-        Button AllTasks= findViewById(R.id.AllTasksButton);
+        Button AllTasks = findViewById(R.id.AllTasksButton);
         AllTasks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent AllTaskIntent = new Intent(MainActivity.this,AllTasks.class);
+                Intent AllTaskIntent = new Intent(MainActivity.this, AllTasks.class);
                 startActivity(AllTaskIntent);
             }
         });
@@ -126,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
         settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent AllTaskIntent = new Intent(MainActivity.this,Settings.class);
+                Intent AllTaskIntent = new Intent(MainActivity.this, Settings.class);
                 startActivity(AllTaskIntent);
             }
         });
@@ -166,7 +169,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
     }//OnCreate
 
 
-
     ArrayList<Task> tasksArray = new ArrayList<>();
 
     @Override
@@ -174,19 +176,18 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
         super.onResume();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        String userName = sharedPreferences.getString("userName","no username yet!");
+        String userName = sharedPreferences.getString("userName", "no username yet!");
         TextView userNameText = findViewById(R.id.userName);
         String teamNameString = sharedPreferences.getString("teamName", "team name");
         TextView teamNameView = findViewById(R.id.teamNameId);
         teamNameView.setText(teamNameString);
-      Button  Login = findViewById(R.id.login);
+        Button Login = findViewById(R.id.login);
 //        userNameText.setText(userName+ "'s Tasks");
-        if (AWSMobileClient.getInstance().isSignedIn()){
-            userNameText.setText(AWSMobileClient.getInstance().getUsername().toString() +"'s Tasks");
+        if (AWSMobileClient.getInstance().isSignedIn()) {
+            userNameText.setText(AWSMobileClient.getInstance().getUsername().toString() + "'s Tasks");
 
-        }
-        else{
-            userNameText.setText("no username yet!"+ "'s Tasks");
+        } else {
+            userNameText.setText("no username yet!" + "'s Tasks");
 
         }
 
@@ -203,15 +204,15 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
                 ModelQuery.list(Task.class),
                 response -> {
                     tasksArray.clear();
-                            team.clear();
+                    team.clear();
                     for (Task task : response.getData()) {
-                        System.out.println("size  " +  tasksArray.size());
+                        System.out.println("size  " + tasksArray.size());
                         Log.i("MyAmplifyApp", task.getTitle());
                         tasksArray.add(task);
                     }
 
 
-                    for (int i = 0;  i < tasksArray.size()  ; i++) {
+                    for (int i = 0; i < tasksArray.size(); i++) {
 //                        System.out.println("Name222222#################  " +  tasksArray.get(i).getTeam().getName());
 //                        System.out.println("Name#################  " + tasksArray.get(i).getTeam().getName().equals(teamNameString));
                         if (tasksArray.get(i).getTeam().getName().equals(teamNameString)) {
@@ -232,12 +233,12 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
         );
 
         setTaskAdapter();
-        System.out.println("TEamssss::::::::::::"+ team);
-        System.out.println("tasks:::::::::::: "+tasksArray);
-        System.out.println("tasks:::::::::::: "+tasksArray.size());
+        System.out.println("TEamssss::::::::::::" + team);
+        System.out.println("tasks:::::::::::: " + tasksArray);
+        System.out.println("tasks:::::::::::: " + tasksArray.size());
     }
 
-    public void setTaskAdapter(){
+    public void setTaskAdapter() {
         recyclerView = findViewById(R.id.allTasksRecycleView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new TaskAdapter(team, this));
@@ -247,11 +248,15 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
     @Override
     public void onTaskClick(int position, Task task) {
         Intent intent = new Intent(this, TaskDetail.class);
-        intent.putExtra("title",task.getTitle());
-        intent.putExtra("body",task.getBody());
-        intent.putExtra("state",task.getState());
+        intent.putExtra("title", task.getTitle());
+        intent.putExtra("body", task.getBody());
+        intent.putExtra("state", task.getState());
         startActivity(intent);
     }
+
+
+
+
 
 }
 

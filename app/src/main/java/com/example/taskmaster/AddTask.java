@@ -28,6 +28,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -129,11 +131,11 @@ protected void onCreate(Bundle savedInstanceState) {
                     error -> Log.e("MyAmplifyApp", "Create failed", error)
             );
             Intent intent = getIntent();
-            String act = intent.getAction();
+            String action = intent.getAction();
             String getType = intent.getType();
             ImageView image = findViewById(R.id.imageViewUplod);
 
-            if (Intent.ACTION_SEND.equals(act) && getType != null) {
+            if (Intent.ACTION_SEND.equals(action) && getType  != null) {
 
                 if (getType.startsWith("image/")) {
                     Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
@@ -161,19 +163,18 @@ protected void onCreate(Bundle savedInstanceState) {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+//        File uploadFile = new File(getApplicationContext().getFilesDir(), "uploadFile");
 
-        File uploadFile = new File(getApplicationContext().getFilesDir(), "uploadFileCopied");
+        File uploadFile = new File(getApplication().getFilesDir(), "uploadFile");
         try {
-            byte[] buffer = new byte[1024];
-            int length;
+
             InputStream inputStream = getContentResolver().openInputStream(data.getData());
             OutputStream outputStream = new FileOutputStream(uploadFile);
 
             file = data.getData().toString();
-
-
-            while ((length = inputStream.read(buffer)) > 0) {
-
+            byte[] buffer = new byte[16384];
+            int length =inputStream.read(buffer);
+            while ( length > 0){
                 outputStream.write(buffer, 0, length);
             }
 

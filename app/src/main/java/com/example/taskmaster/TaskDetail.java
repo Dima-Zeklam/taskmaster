@@ -32,10 +32,11 @@ public class TaskDetail extends AppCompatActivity {
 
         Amplify.Storage.downloadFile(
                 "image",
-                new File(getApplicationContext().getFilesDir() + "/download.jpg"),
+                new File(getApplicationContext().getFilesDir() + "/download"),
                 result -> {
+
                     ImageView image = findViewById(R.id.imgTaskDetails);
-                    getIntent().getExtras().getString("img");
+                    getIntent().getExtras().getString("file");
                     image.setImageBitmap(BitmapFactory.decodeFile(result.getFile().getPath()));
 
                     Log.i("MyAmplifyApp", "Successfully downloaded: " + result.getFile());
