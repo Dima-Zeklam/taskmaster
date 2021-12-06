@@ -32,7 +32,7 @@ public class TaskDetail extends AppCompatActivity {
 
         Amplify.Storage.downloadFile(
                 "image",
-                new File(getApplicationContext().getFilesDir() + "/download"),
+                new File(getApplicationContext().getFilesDir() + "/download.jpg"),
                 result -> {
 
                     ImageView image = findViewById(R.id.imgTaskDetails);
