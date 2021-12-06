@@ -99,7 +99,13 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
                         error -> Log.e("AmplifyQuickstart", error.toString())
                 );
                 Login.setText("sign out");
+        if (AWSMobileClient.getInstance().isSignedIn()) {
+            userNameText.setText(AWSMobileClient.getInstance().getUsername().toString() + "'s Tasks");
 
+        } else {
+            userNameText.setText("no username yet!" + "'s Tasks");
+
+        }
             }
         });
 
@@ -171,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
 
     ArrayList<Task> tasksArray = new ArrayList<>();
 
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -182,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
         TextView teamNameView = findViewById(R.id.teamNameId);
         teamNameView.setText(teamNameString);
         Button Login = findViewById(R.id.login);
-//        userNameText.setText(userName+ "'s Tasks");
+        userNameText.setText(userName+ "'s Tasks");
         if (AWSMobileClient.getInstance().isSignedIn()) {
             userNameText.setText(AWSMobileClient.getInstance().getUsername().toString() + "'s Tasks");
 

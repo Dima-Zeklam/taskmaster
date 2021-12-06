@@ -163,18 +163,19 @@ protected void onCreate(Bundle savedInstanceState) {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        File uploadFile = new File(getApplicationContext().getFilesDir(), "uploadFile");
 
-        File uploadFile = new File(getApplication().getFilesDir(), "uploadFile");
+        File uploadFile = new File(getApplicationContext().getFilesDir(), "uploadFileCopied");
         try {
-
+            byte[] buffer = new byte[1024];
+            int length;
             InputStream inputStream = getContentResolver().openInputStream(data.getData());
             OutputStream outputStream = new FileOutputStream(uploadFile);
 
             file = data.getData().toString();
-            byte[] buffer = new byte[16384];
-            int length =inputStream.read(buffer);
-            while ( length > 0){
+
+
+            while ((length = inputStream.read(buffer)) > 0) {
+
                 outputStream.write(buffer, 0, length);
             }
 
