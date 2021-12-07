@@ -86,10 +86,10 @@
         android:text="Add Task"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.359"
+        app:layout_constraintHorizontal_bias="0.429"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.948" />
+        app:layout_constraintVertical_bias="0.998" />
 
     <TextView
         android:id="@+id/textView7"
@@ -140,7 +140,7 @@
         app:layout_constraintHorizontal_bias="0.223"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.463" />
+        app:layout_constraintVertical_bias="0.435" />
 
     <RadioButton
         android:id="@+id/radioButtonTeam3"
@@ -149,10 +149,10 @@
         android:text="team 3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.744"
+        app:layout_constraintHorizontal_bias="0.836"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.847" />
+        app:layout_constraintVertical_bias="0.928" />
 
     <RadioButton
         android:id="@+id/radioButtonTeam2"
@@ -161,10 +161,10 @@
         android:text="team 2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.372"
+        app:layout_constraintHorizontal_bias="0.515"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.847" />
+        app:layout_constraintVertical_bias="0.928" />
 
     <RadioButton
         android:id="@+id/radioButtonTeam1"
@@ -173,10 +173,10 @@
         android:text="team 1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.047"
+        app:layout_constraintHorizontal_bias="0.163"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.847" />
+        app:layout_constraintVertical_bias="0.928" />
 
     <Button
         android:id="@+id/uploadFile"
@@ -185,21 +185,19 @@
         android:text="Upload File"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.348"
+        app:layout_constraintHorizontal_bias="0.345"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.554" />
-
+        app:layout_constraintVertical_bias="0.538" />
 
     <ImageView
         android:id="@+id/imageViewUplod"
-        android:layout_width="161dp"
-        android:layout_height="135dp"
+        android:layout_width="361dp"
+        android:layout_height="172dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.364"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.716" />
+        app:layout_constraintVertical_bias="0.771" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

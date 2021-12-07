@@ -42,6 +42,7 @@ protected void onCreate(Bundle savedInstanceState) {
     setContentView(R.layout.activity_add_task);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
     Button attachFile = findViewById(R.id.uploadFile);
     attachFile.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -69,6 +70,23 @@ protected void onCreate(Bundle savedInstanceState) {
             error -> Log.e("MyAmplifyApp", "Query failure", error)
     );
 
+    Intent intent = getIntent();
+    String action = intent.getAction();
+    String getType = intent.getType();
+    ImageView image = findViewById(R.id.imageViewUplod);
+
+    if (Intent.ACTION_SEND.equals(action) && getType  != null) {
+
+        if (getType.startsWith("image/")) {
+            Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+
+            if (imageUri != null) {
+                image.setImageURI(imageUri);
+                image.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+    
     Button SubmitButton = findViewById(R.id.Submit);
     SubmitButton.setOnClickListener(new View.OnClickListener() {
         int countTasks =0 ;
@@ -88,6 +106,8 @@ protected void onCreate(Bundle savedInstanceState) {
             //AppDatabase appDb = AppDatabase.getInstance(getApplicationContext());
             // appDb.taskDao().insertAll(task);
 
+            Intent goToHomePage = new Intent(AddTask.this, MainActivity.class);
+            startActivity(goToHomePage);
             String teamName = "";
             if (team1.isChecked()) {
 
@@ -130,24 +150,7 @@ protected void onCreate(Bundle savedInstanceState) {
 
                     error -> Log.e("MyAmplifyApp", "Create failed", error)
             );
-            Intent intent = getIntent();
-            String action = intent.getAction();
-            String getType = intent.getType();
-            ImageView image = findViewById(R.id.imageViewUplod);
 
-            if (Intent.ACTION_SEND.equals(action) && getType  != null) {
-
-                if (getType.startsWith("image/")) {
-                    Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
-
-                    if (imageUri != null) {
-                        image.setImageURI(imageUri);
-                        image.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
-            Intent goToHomePage = new Intent(AddTask.this, MainActivity.class);
-            startActivity(goToHomePage);
         }
     });
 
@@ -192,5 +195,6 @@ protected void onCreate(Bundle savedInstanceState) {
         } catch (IOException e) {
             e.printStackTrace();
         }}
+
 
 }
