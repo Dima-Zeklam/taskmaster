@@ -1,8 +1,11 @@
 package com.example.taskmaster;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -13,13 +16,12 @@ import com.amplifyframework.core.Amplify;
 import java.io.File;
 
 public class TaskDetail extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        Intent intent = getIntent();
         TextView title = findViewById(R.id.changableTitle);
         TextView body = findViewById(R.id.bodyText);
         TextView state = findViewById(R.id.stateText);
@@ -29,7 +31,7 @@ public class TaskDetail extends AppCompatActivity {
         title.setText(strTitle);
         body.setText(strbody);
         state.setText(strState);
-
+//        fileName = intent.getExtras().getString("taskFileName");
         Amplify.Storage.downloadFile(
                 "image",
                 new File(getApplicationContext().getFilesDir() + "/download.jpg"),
