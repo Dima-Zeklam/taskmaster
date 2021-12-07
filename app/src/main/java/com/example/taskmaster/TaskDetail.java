@@ -31,6 +31,8 @@ public class TaskDetail extends AppCompatActivity {
         title.setText(strTitle);
         body.setText(strbody);
         state.setText(strState);
+        TextView locationText = findViewById(R.id.textLocation);
+        locationText.setText("Lat: "+intent.getExtras().getString("taskLat")+", Long: "+intent.getExtras().getString("taskLong"));
 //        fileName = intent.getExtras().getString("taskFileName");
         Amplify.Storage.downloadFile(
                 "image",

@@ -185,7 +185,13 @@ choose TaskMaster as the app to share that image with, and be taken directly to 
 ![addTaskPage](screenshots/AddTask411.png)
 
 
+# Lab: 42 - Location
+* Update Task schema to be included with location.
+* When the user adds a task, their location will be retrieved and included in the Task details page.
 
+* Task Details page
+
+![taskdetail](screenshots/Location.png)
 
 
 
