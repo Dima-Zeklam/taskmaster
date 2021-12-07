@@ -83,6 +83,9 @@
                 <data android:scheme="myapp" />
             </intent-filter>
         </activity>
+        <service
+            android:name=".MyNavigationService"
+            android:foregroundServiceType="location" />
     </application>
 
 </manifest>

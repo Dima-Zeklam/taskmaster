@@ -1,13 +1,20 @@
 package com.example.taskmaster;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,19 +29,27 @@ import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.Team;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class AddTask extends AppCompatActivity {
+    FusedLocationProviderClient mFusedLocationClient;
+    int PERMISSION_ID = 44;
+    String longitude;
+    String latitude;
 
 @Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +57,15 @@ protected void onCreate(Bundle savedInstanceState) {
     setContentView(R.layout.activity_add_task);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+    mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
 
     Button attachFile = findViewById(R.id.uploadFile);
     attachFile.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             getFile();
+            getLastLocation();
         }
     });
 
@@ -92,6 +110,9 @@ protected void onCreate(Bundle savedInstanceState) {
         int countTasks =0 ;
         @Override
         public void onClick(View v) {
+            ArrayList<String> location = new ArrayList<>();
+            location.add(longitude);
+            location.add(latitude);
             EditText title = findViewById(R.id.editTitle);
             String GetTitle = title.getText().toString();
             EditText body = findViewById(R.id.editBody);
@@ -140,6 +161,7 @@ protected void onCreate(Bundle savedInstanceState) {
                     .body(body.getText().toString())
                     .team(selectedTeam)
                     .file(file)
+                    .location(location)
                     .state(state.getText().toString())
                     .build();
 
@@ -194,7 +216,86 @@ protected void onCreate(Bundle savedInstanceState) {
             );
         } catch (IOException e) {
             e.printStackTrace();
-        }}
+        }
 
+//        if (checkPermissions()) {
+//            getLastLocation();
+//        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void getLastLocation() {
+        if (checkPermissions()) {
+            if (isLocationEnabled()) {
+                mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onComplete(@NonNull com.google.android.gms.tasks.Task<Location> task) {
+                        Location location = task.getResult();
+                        if (location == null) {
+                            requestNewLocationData();
+                        } else {
+                            longitude = String.valueOf(location.getLongitude());
+                            latitude = String.valueOf(location.getLatitude());
+
+                        }
+                    }
+
+                });
+            }
+        } else {
+           requestPermissions();
+        }
+    }
+
+        private boolean isLocationEnabled() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+    }
+    private boolean checkPermissions() {
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ID);
+    }
+
+    @SuppressLint("MissingPermission")
+    private void requestNewLocationData() {
+        LocationRequest mLocationRequest = new LocationRequest ();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(5);
+        mLocationRequest.setFastestInterval(0);
+        mLocationRequest.setNumUpdates(1);
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+
+    }
+    private LocationCallback mLocationCallback = new LocationCallback() {
+
+        @SuppressLint("SetTextI18n")
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            Location mLastLocation = locationResult.getLastLocation();
+            longitude = String.valueOf(mLastLocation.getLongitude());
+            latitude = String.valueOf(mLastLocation.getLatitude());
+        }
+    };
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == PERMISSION_ID) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLastLocation();
+            }
+        }
+    }
 
 }

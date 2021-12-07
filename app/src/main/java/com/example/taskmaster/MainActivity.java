@@ -258,12 +258,11 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
         intent.putExtra("title", task.getTitle());
         intent.putExtra("body", task.getBody());
         intent.putExtra("state", task.getState());
+        intent.putExtra("taskLong", task.getLocation().get(0));
+        intent.putExtra("taskLat", task.getLocation().get(1));
         startActivity(intent);
+    }
     }
 
 
-
-
-
-}
 
